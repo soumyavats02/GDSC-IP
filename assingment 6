@@ -1,0 +1,80 @@
+Ans 1
+class Solution {
+public:
+    int longestSubarray(vector<int>& nums, int limit) {
+        priority_queue<pair<int, int>> maxpq;
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> minpq;   
+        int res = 0;
+        for(int start = 0, end = 0, len = (int)nums.size(); end < len; ++end){
+            minpq.emplace(nums[end], end);
+            maxpq.emplace(nums[end], end);
+            while(start <= end && maxpq.top().first - minpq.top().first > limit){
+                ++start;
+                while(!maxpq.empty() && maxpq.top().second < start) maxpq.pop();
+                while(!minpq.empty() && minpq.top().second < start) minpq.pop();
+            }
+            res = max(res, end - start + 1);
+        }
+        return res;
+    }
+};
+
+Ans 2
+class Solution {
+public:
+    int numberOfSubstrings(string s) {
+        vector<int> idx(3,-1);
+        int res = 0;
+        for (int i = 0; i < s.length(); i++)
+        {
+            idx[s[i]-'a'] = i;
+            res += min(idx[0], min(idx[1], idx[2]))+1;
+        }
+        return res;
+    }
+};
+
+Ans 3
+class Solution {
+public:
+    int balancedString(string s) {
+        unordered_map<char,int> mp;
+        int n=s.length(),k=n/4;
+        for(int i=0;i<s.length();i++){
+            mp[s[i]]++;
+        }
+        
+        
+        int i=0;
+        int result=n;
+        for(int j=0;j<n;j++){
+            mp[s[j]]--;
+            
+            while(i-1<=j&&mp['W']<=k&&mp['E']<=k&&mp['Q']<=k&&mp['R']<=k){
+                result=min(result,j-i+1);
+                mp[s[i]]++;
+                i++;
+            }
+        }
+        
+        return result;
+    }
+};
+
+Ans 4
+class Solution {
+public:
+    int longestOnes(vector<int>& nums, int k) {
+        int start = 0, end = 0, zeros = 0, res = 0;
+        for (end = 0; end < nums.size(); end++) {
+            if (!nums[end])
+                zeros++;
+            while (zeros > k) {
+                if (!nums[start]) zeros--;
+                start++;
+            } 
+            res = max(res, end - start + 1);
+        }
+        return res;
+    }
+};
