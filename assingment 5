@@ -1,0 +1,67 @@
+Ans 1
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        if(!head || !head->next) return head;
+        
+        ListNode *front=head, *next=head->next, *current=nullptr;
+        
+        while(next) {
+            front->next = current;
+            current = front;
+            front = next;
+            next = next->next;
+        }
+        front->next = current;
+        return front;
+    }
+};
+
+Ans 2
+class Solution {
+public:
+    void deleteNode(ListNode* node) {
+        ListNode *temp = node->next;
+        node->val= temp->val;
+        node->next = temp->next;
+        delete temp;
+    }
+};
+
+Ans 3
+class Solution {
+public:
+    ListNode* middleNode(ListNode* head) {
+        map<int, ListNode *> dp;
+        int i = 0;
+        while(head!= NULL)
+        {
+            dp.insert(make_pair(i,head));
+            i++;
+            head= head->next;
+        }
+            return dp[dp.size()/2];
+    }
+};
+
+Ans 4
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+        ListNode* l3;
+        if(l1 == NULL) return l2;
+        if(l2 == NULL) return l1;
+        if(l1->val > l2->val) swap(l1,l2);
+        ListNode *res = l1;
+        while(l1!=NULL && l2!=NULL){
+            ListNode *temp = NULL;
+            while(l1!=NULL && (l1->val <= l2->val)){
+                temp=l1;
+                l1=l1->next;
+            }
+            temp->next = l2;
+            swap(l1, l2);
+        }
+        return res;
+    }
+};
