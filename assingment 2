@@ -1,0 +1,168 @@
+Ans 1
+class MyStack {
+public:
+    /** Initialize your data structure here. */
+    queue<int> q;
+    MyStack() 
+    {
+        
+    }
+    /** Push element x onto stack. */
+    void push(int x) 
+    {
+        q.push(x);
+        int n=q.size();
+        for(int i=0;i<n-1;i++)
+        {
+            int k=q.front();
+            q.pop();
+            q.push(k);
+        }
+    }
+    /** Removes the element on top of the stack and returns that element. */
+    int pop()
+    {
+        if(q.empty())
+        {
+            return -1;
+        }
+        int z=q.front();
+        q.pop();
+        return z;
+    }
+    /** Get the top element. */
+    int top() 
+    {
+        return q.front();
+    }
+    /** Returns whether the stack is empty. */
+    bool empty() 
+    {
+        return q.empty();
+    }
+};
+
+Ans 2
+class MyQueue {
+public:
+    stack<int> input,output;
+    /** Initialize your data structure here. */
+    MyQueue() {
+        
+    }
+    
+    /** Push element x to the back of queue. */
+    void push(int x) {
+        input.push(x);
+    }
+    
+    /** Removes the element from in front of queue and returns that element. */
+    int pop() {
+        if(output.empty()){
+            while(!input.empty()){
+                output.push(input.top());
+                input.pop();
+            }
+        }
+        int x=output.top();
+        output.pop();
+        return x;
+    }
+    
+    /** Get the front element. */
+    int peek() {
+        if(output.empty()){
+            while(!input.empty()){
+                output.push(input.top());
+                input.pop();
+            }
+        }
+        return output.top();
+        
+    }
+    
+    /** Returns whether the queue is empty. */
+    bool empty() {
+        return input.empty() && output.empty();
+    }
+};
+
+Ans 3
+class Solution {
+public:
+    bool isValid(string s) {
+        stack<char> st;
+        
+        for(int i=0;i<s.length();i++){
+            
+            if(s[i]=='(' || s[i]=='[' ||s[i]=='{'){
+                st.push(s[i]);
+            }
+            
+            else{
+                
+                if(s[i]==')' && !st.empty() && st.top()=='('){
+                    st.pop();
+                }
+                
+                else if(s[i]=='}' && !st.empty() && st.top()=='{'){
+                    st.pop();
+                }
+                
+                else if(s[i]==']' && !st.empty() && st.top()=='['){
+                    st.pop();
+                }
+                
+                else{
+                    st.push(s[i]);
+                }
+                
+            }         
+            
+        }
+        
+        if(st.empty()){
+            return true;
+        }
+        
+        return false;
+    }
+};
+
+Ans 4
+class Solution {
+public:
+    vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) { 
+        stack<int>s;
+        unordered_map<int,int>mp;
+        
+        for(int i=nums2.size()-1;i>=0;i--){
+            
+            if(s.empty()) mp[nums2[i]]=-1;
+            
+            else if(!s.empty() && s.top() > nums2[i])
+                mp[nums2[i]]=s.top();
+            
+            else if(!s.empty() && s.top() <= nums2[i]){
+                
+                while(!s.empty() && s.top() <=nums2[i]) s.pop();
+                
+                if(s.empty()) mp[nums2[i]]=-1;
+                
+                else mp[nums2[i]]=s.top();
+            }
+            
+            s.push(nums2[i]);
+            
+        }
+        
+        vector<int>v;
+        for(int i=0;i<nums1.size();i++){
+            v.push_back(mp[nums1[i]]);
+            
+        }
+        return v;
+        
+        
+    }
+};
